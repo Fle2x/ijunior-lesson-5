@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -15,11 +12,11 @@ public class AlarmSystem : MonoBehaviour
         alarmSound = GetComponent<AudioSource>();
     }
 
-    private IEnumerator ChangeVolume(int startValue, int endValue, TurnOnOffAlarm turnOnOffAlarm)
+    private IEnumerator ChangeVolume(int startValue, int endValue, AlarmStatus alarmStatus)
     {
         float time = 0;
 
-        if (turnOnOffAlarm == TurnOnOffAlarm.Play)
+        if (alarmStatus == AlarmStatus.On)
             alarmSound.Play();
 
         while (time < 1)
@@ -30,23 +27,23 @@ public class AlarmSystem : MonoBehaviour
             yield return null;
         }
 
-        if (turnOnOffAlarm == TurnOnOffAlarm.Stop)
+        if (alarmStatus == AlarmStatus.Off)
             alarmSound.Stop();
     }
 
-    private enum TurnOnOffAlarm
+    private enum AlarmStatus
     {
-        Play = 0,
-        Stop = 1
+        On = 0,
+        Off = 1
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        StartCoroutine(ChangeVolume(0, 1, TurnOnOffAlarm.Play));
+        StartCoroutine(ChangeVolume(0, 1, AlarmStatus.On));
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        StartCoroutine(ChangeVolume(1, 0, TurnOnOffAlarm.Stop));
+        StartCoroutine(ChangeVolume(1, 0, AlarmStatus.Off));
     }
 }
