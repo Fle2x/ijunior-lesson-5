@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class AlarmSystem : MonoBehaviour
 {
-    public AudioSource alarmSound;
+    [SerializeField] private AudioSource alarm;
 
     private void Start()
     {
-        alarmSound = GetComponent<AudioSource>();
+        alarm = GetComponent<AudioSource>();
     }
 
     private IEnumerator ChangeVolume(int startValue, int endValue, AlarmStatus alarmStatus)
@@ -17,18 +17,18 @@ public class AlarmSystem : MonoBehaviour
         float time = 0;
 
         if (alarmStatus == AlarmStatus.On)
-            alarmSound.Play();
+            alarm.Play();
 
         while (time < 1)
         {
             float volumeValue = Mathf.Lerp(startValue, endValue, time / 1);
             time += Time.deltaTime;
-            alarmSound.volume = volumeValue;
+            alarm.volume = volumeValue;
             yield return null;
         }
 
         if (alarmStatus == AlarmStatus.Off)
-            alarmSound.Stop();
+            alarm.Stop();
     }
 
     private enum AlarmStatus
